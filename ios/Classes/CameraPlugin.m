@@ -706,7 +706,33 @@ FourCharCode const videoFormat = kCVPixelFormatType_32BGRA;
 }
 
 - (void)setFlashMode:(int)flashMode level:(float)level {
-    _flashMode = flashMode;
+  if (flashMode == 2) {
+    if (!_captureDevice.hasTorch) {
+      return;
+    }
+    if (!_captureDevice.isTorchAvailable) {
+      return;
+    }
+    if (_captureDevice.torchMode != AVCaptureTorchModeOn) {
+      [_captureDevice lockForConfiguration:nil];
+      [_captureDevice setTorchMode:AVCaptureTorchModeOn];
+      [_captureDevice unlockForConfiguration];
+    }
+  } else {
+    if (!_captureDevice.hasFlash) {
+      return;
+    }
+//    if (![_capturePhotoOutput.supportedFlashModes
+//            containsObject:[NSNumber numberWithInt:((int)avFlashMode)]]) {
+//      return;
+//    }
+    if (_captureDevice.torchMode != AVCaptureTorchModeOff) {
+      [_captureDevice lockForConfiguration:nil];
+      [_captureDevice setTorchMode:AVCaptureTorchModeOff];
+      [_captureDevice unlockForConfiguration];
+    }
+  }
+  _flashMode = flashMode;
 }
 
 - (void)setAutoExposureMode:(BOOL)enable {

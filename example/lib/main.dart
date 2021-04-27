@@ -272,6 +272,9 @@ class _CameraExampleHomeState extends State<CameraExampleHome>
     } else if (flashMode == FlashMode.autoFlash) {
       iconData = Icons.flash_auto;
       color = Colors.red;
+    } else if (flashMode == FlashMode.torch) {
+      iconData = Icons.flare_sharp;
+      color = Colors.yellow;
     }
     return IconButton(
       icon: Icon(iconData),
@@ -285,14 +288,15 @@ class _CameraExampleHomeState extends State<CameraExampleHome>
   /// Toggle Flash
   Future<void> _onFlashButtonPressed() async {
     bool hasFlash = false;
-    if (flashMode == FlashMode.off || flashMode == FlashMode.torch) {
+    if (flashMode == FlashMode.off) {
       // Turn on the flash for capture
       flashMode = FlashMode.alwaysFlash;
     } else if (flashMode == FlashMode.alwaysFlash) {
       // Turn on the flash for capture if needed
       flashMode = FlashMode.autoFlash;
+    } else if (flashMode == FlashMode.autoFlash) {
+      flashMode = FlashMode.torch;
     } else {
-      // Turn off the flash
       flashMode = FlashMode.off;
     }
     // Apply the new mode
